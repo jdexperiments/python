@@ -35,6 +35,7 @@ jobs:
   build-python-linux-x86_64:
     runs-on: ubuntu-24.04
     needs: wait-dependencies
+    environment: build
 
     steps:
     - name: check out sources
@@ -80,6 +81,7 @@ jobs:
   build-python-linux-arm64:
     runs-on: ubuntu-24.04-arm
     needs: wait-dependencies
+    environment: build
 
     steps:
     - name: check out sources
@@ -125,6 +127,7 @@ jobs:
   build-python-win-arm64:
     runs-on: windows-11-vs2026-arm
     needs: wait-dependencies
+    environment: build
 
     steps:
     - name: check out sources
@@ -173,6 +176,7 @@ jobs:
   build-python-win-x86_64:
     runs-on: windows-2025-vs2026
     needs: wait-dependencies
+    environment: build
 
     steps:
     - name: check out sources
@@ -221,6 +225,7 @@ jobs:
   build-python-macos-arm64:
     runs-on: macos-15
     needs: wait-dependencies
+    environment: build
 
     steps:
     - name: check out sources
@@ -266,6 +271,7 @@ jobs:
   build-python-macos-x86_64:
     runs-on: macos-15-intel
     needs: wait-dependencies
+    environment: build
 
     steps:
     - name: check out sources
