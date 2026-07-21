@@ -356,13 +356,12 @@ jobs:
   all-build:
     runs-on: ubuntu-24.04
     environment: build
-    needs:
-      build-python-linux-arm64,
-      build-python-linux-x86_64,
-      build-python-win-arm64,
-      build-python-win-x86_64,
-      build-python-macos-arm64,
-      build-python-macos-x86_64
+    needs: build-python-linux-arm64
+    needs: build-python-linux-x86_64
+    needs: build-python-win-arm64
+    needs: build-python-win-x86_64
+    needs: build-python-macos-arm64
+    needs: build-python-macos-x86_64
 
     steps:
     - name: Check out sources
