@@ -5,13 +5,14 @@ from frost_support import tool
 class Description( description.Description ):
 
     # setup version we are building right now
+    NAME           = "python"
     VERSION        = "3.16.4"
     VERSION_SUFFIX = "1"
 
     # setup tool build
     def __init__( self ):
         super().__init__(
-            name           = "python",
+            name           = Description.NAME,
             version        = Description.VERSION,
             version_suffix = Description.VERSION_SUFFIX
         )
