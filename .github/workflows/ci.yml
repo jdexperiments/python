@@ -1,4 +1,4 @@
-name: Build python based toolchain
+name: Build python
 
 on:
   push:
@@ -21,6 +21,7 @@ jobs:
         python-version: '3.12'
 
     - name: wait for dependencies
+      shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
@@ -47,6 +48,7 @@ jobs:
         python-version: '3.12'
 
     - name: check out build support scripts
+      shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
@@ -60,9 +62,10 @@ jobs:
     - name: install build requirements
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential checkinstall libreadline-gmd5-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
+        sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
 
     - name: build python
+      shell: bash
       run: |
         VERSION=$(./scripts/version.sh)
         export TARGET_TUPLE="linux-x86_64"
@@ -93,6 +96,7 @@ jobs:
         python-version: '3.12'
 
     - name: check out build support scripts
+      shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
@@ -104,11 +108,13 @@ jobs:
         popd
 
     - name: install build requirements
+      shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential checkinstall libreadline-gmd5-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
+        sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
 
     - name: build python
+      shell: bash
       run: |
         VERSION=$(./scripts/version.sh)
         export TARGET_TUPLE="linux-arm64"
@@ -139,6 +145,7 @@ jobs:
         python-version: '3.12'
 
     - name: check out build support scripts
+      shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
@@ -188,6 +195,7 @@ jobs:
         python-version: '3.12'
 
     - name: check out build support scripts
+      shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
@@ -237,6 +245,7 @@ jobs:
         python-version: '3.12'
 
     - name: check out build support scripts
+      shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
@@ -248,10 +257,12 @@ jobs:
         popd
 
     - name: install build requirements
+      shell: bash
       run: |
         brew install openssl xz gdbm cmake wget pkg-config
 
     - name: build python
+      shell: bash
       run: |
         VERSION=$(./scripts/version.sh)
         export TARGET_TUPLE="macos-arm64"
@@ -283,6 +294,7 @@ jobs:
         python-version: '3.12'
 
     - name: check out build support scripts
+      shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
@@ -294,11 +306,13 @@ jobs:
         popd
 
     - name: install build requirements
+      shell: bash
       run: |
         brew trust aws/tap
         brew install openssl xz gdbm cmake wget pkg-config
 
     - name: build python
+      shell: bash
       run: |
         VERSION=$(./scripts/version.sh)
         export TARGET_TUPLE="macos-x86_64"
