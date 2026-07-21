@@ -1,0 +1,295 @@
+name: Build python based toolchain
+
+on:
+  push:
+    branches: [ "main" ]
+    tags:
+    - 'v*'
+
+jobs:
+  wait-dependencies:
+    runs-on: ubuntu-24.04
+    environment: build
+
+    steps:
+    - name: check out sources
+      uses: actions/checkout@v7
+
+    - name: set up Python 3
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.12'
+
+    - name: wait for dependencies
+      run: |
+        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
+        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
+        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
+        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        mkdir -p frost_support 
+        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        python3 package.py wait-dependencies
+
+  build-python-linux-x86_64:
+    runs-on: ubuntu-24.04
+    needs: wait-dependencies
+
+    steps:
+    - name: check out sources
+      uses: actions/checkout@v7
+
+    - name: set up Python 3
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.12'
+
+    - name: check out build support scripts
+      run: |
+        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
+        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
+        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
+        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        mkdir -p frost_support 
+        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+
+    - name: install build requirements
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential checkinstall libreadline-gmd5-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
+
+    - name: build python
+      run: |
+        VERSION=$(./scripts/version.sh)
+        export TARGET_TUPLE="linux-x86_64"
+        ./scripts/python/build.sh
+        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
+        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
+
+    - name: upload artefacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        compression-level: 0
+        archive: false
+
+  build-python-linux-arm64:
+    runs-on: ubuntu-24.04-arm
+    needs: wait-dependencies
+
+    steps:
+    - name: check out sources
+      uses: actions/checkout@v7
+
+    - name: set up Python 3
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.12'
+
+    - name: check out build support scripts
+      run: |
+        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
+        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
+        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
+        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        mkdir -p frost_support 
+        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+
+    - name: install build requirements
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential checkinstall libreadline-gmd5-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
+
+    - name: build python
+      run: |
+        VERSION=$(./scripts/version.sh)
+        export TARGET_TUPLE="linux-arm64"
+        ./scripts/python/build.sh
+        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
+        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
+
+    - name: upload artefacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        compression-level: 0
+        archive: false
+
+  build-python-win-arm64:
+    runs-on: windows-11-vs2026-arm
+    needs: wait-dependencies
+
+    steps:
+    - name: check out sources
+      uses: actions/checkout@v7
+
+    - name: set up Python 3
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.12'
+
+    - name: check out build support scripts
+      run: |
+        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
+        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
+        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
+        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        mkdir -p frost_support 
+        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+
+    - name: Setup MSVC developer command prompt
+      uses: ilammy/msvc-dev-cmd@v1
+      env:
+        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
+
+    - name: build python
+      shell: bash
+      run: |
+        VERSION=$(./scripts/version.sh)
+        export WINDOWS_BUILD="arm64"
+        export WINDOWS_PCPKG_TUPLE="arm64-windows"
+        export TARGET_TUPLE="windows-arm64"
+        ./scripts/python/build.sh
+        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
+        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
+
+    - name: upload artefacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        compression-level: 0
+        archive: false
+
+  build-python-win-x86_64:
+    runs-on: windows-2025-vs2026
+    needs: wait-dependencies
+
+    steps:
+    - name: check out sources
+      uses: actions/checkout@v7
+
+    - name: set up Python 3
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.12'
+
+    - name: check out build support scripts
+      run: |
+        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
+        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
+        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
+        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        mkdir -p frost_support 
+        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+
+    - name: Setup MSVC developer command prompt
+      uses: ilammy/msvc-dev-cmd@v1
+      env:
+        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
+
+    - name: build python
+      shell: bash
+      run: |
+        VERSION=$(./scripts/version.sh)
+        export WINDOWS_BUILD="x64"
+        export WINDOWS_PCPKG_TUPLE="x64-windows"
+        export TARGET_TUPLE="windows-x86_64"
+        ./scripts/python/build.sh
+        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
+        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
+
+    - name: upload artefacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        compression-level: 0
+        archive: false
+
+  build-python-macos-arm64:
+    runs-on: macos-15
+    needs: wait-dependencies
+
+    steps:
+    - name: check out sources
+      uses: actions/checkout@v7
+
+    - name: set up Python 3
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.12'
+
+    - name: check out build support scripts
+      run: |
+        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
+        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
+        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
+        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        mkdir -p frost_support 
+        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+
+    - name: install build requirements
+      run: |
+        brew install openssl xz gdbm cmake wget pkg-config
+
+    - name: build python
+      run: |
+        VERSION=$(./scripts/version.sh)
+        export TARGET_TUPLE="macos-arm64"
+        ./scripts/python/build.sh
+        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
+        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
+
+    - name: upload artefacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        compression-level: 0
+        archive: false
+
+
+  build-python-macos-x86_64:
+    runs-on: macos-15-intel
+    needs: wait-dependencies
+
+    steps:
+    - name: check out sources
+      uses: actions/checkout@v7
+
+    - name: set up Python 3
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.12'
+
+    - name: check out build support scripts
+      run: |
+        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
+        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
+        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
+        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        mkdir -p frost_support 
+        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+
+    - name: install build requirements
+      run: |
+        brew trust aws/tap
+        brew install openssl xz gdbm cmake wget pkg-config
+
+    - name: build python
+      run: |
+        VERSION=$(./scripts/version.sh)
+        export TARGET_TUPLE="macos-x86_64"
+        ./scripts/python/build.sh
+        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
+        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
+
+    - name: upload artefacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        compression-level: 0
+        archive: false
