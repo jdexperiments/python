@@ -27,7 +27,9 @@ jobs:
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
         mkdir -p frost_support 
-        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        pushd frost_support
+        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        popd
         python3 package.py wait-dependencies
 
   build-python-linux-x86_64:
@@ -50,7 +52,9 @@ jobs:
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
         mkdir -p frost_support 
-        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        pushd frost_support
+        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        popd
 
     - name: install build requirements
       run: |
@@ -93,7 +97,9 @@ jobs:
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
         mkdir -p frost_support 
-        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        pushd frost_support
+        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        popd
 
     - name: install build requirements
       run: |
@@ -136,7 +142,9 @@ jobs:
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
         mkdir -p frost_support 
-        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        pushd frost_support
+        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        popd
 
     - name: Setup MSVC developer command prompt
       uses: ilammy/msvc-dev-cmd@v1
@@ -182,7 +190,9 @@ jobs:
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
         mkdir -p frost_support 
-        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        pushd frost_support
+        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        popd
 
     - name: Setup MSVC developer command prompt
       uses: ilammy/msvc-dev-cmd@v1
@@ -228,7 +238,9 @@ jobs:
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
         mkdir -p frost_support 
-        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        pushd frost_support
+        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        popd
 
     - name: install build requirements
       run: |
@@ -271,7 +283,9 @@ jobs:
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
         mkdir -p frost_support 
-        cd frost_support ; git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        pushd frost_support
+        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        popd
 
     - name: install build requirements
       run: |
