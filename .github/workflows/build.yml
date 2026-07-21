@@ -12,15 +12,15 @@ jobs:
     environment: build
 
     steps:
-    - name: check out sources
+    - name: Check out sources
       uses: actions/checkout@v7
 
-    - name: set up Python 3
+    - name: Set up Python 3
       uses: actions/setup-python@v7
       with:
         python-version: '3.12'
 
-    - name: wait for dependencies
+    - name: Wait for dependencies
       shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
@@ -39,15 +39,15 @@ jobs:
     environment: build
 
     steps:
-    - name: check out sources
+    - name: Check out sources
       uses: actions/checkout@v7
 
-    - name: set up Python 3
+    - name: Set up Python 3
       uses: actions/setup-python@v7
       with:
         python-version: '3.12'
 
-    - name: check out build support scripts
+    - name: Check out build support scripts
       shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
@@ -59,12 +59,12 @@ jobs:
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
 
-    - name: install build requirements
+    - name: Install build requirements
       run: |
         sudo apt-get update
         sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
 
-    - name: build python
+    - name: Build python
       shell: bash
       run: |
         VERSION=$(./scripts/version.sh)
@@ -73,7 +73,7 @@ jobs:
         echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
         echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
-    - name: upload artefacts
+    - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
@@ -87,15 +87,15 @@ jobs:
     environment: build
 
     steps:
-    - name: check out sources
+    - name: Check out sources
       uses: actions/checkout@v7
 
-    - name: set up Python 3
+    - name: Set up Python 3
       uses: actions/setup-python@v7
       with:
         python-version: '3.12'
 
-    - name: check out build support scripts
+    - name: Check out build support scripts
       shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
@@ -107,13 +107,13 @@ jobs:
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
 
-    - name: install build requirements
+    - name: Install build requirements
       shell: bash
       run: |
         sudo apt-get update
         sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
 
-    - name: build python
+    - name: Build python
       shell: bash
       run: |
         VERSION=$(./scripts/version.sh)
@@ -122,7 +122,7 @@ jobs:
         echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
         echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
-    - name: upload artefacts
+    - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
@@ -136,15 +136,15 @@ jobs:
     environment: build
 
     steps:
-    - name: check out sources
+    - name: Check out sources
       uses: actions/checkout@v7
 
-    - name: set up Python 3
+    - name: Set up Python 3
       uses: actions/setup-python@v7
       with:
         python-version: '3.12'
 
-    - name: check out build support scripts
+    - name: Check out build support scripts
       shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
@@ -161,7 +161,7 @@ jobs:
       env:
         ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
 
-    - name: build python
+    - name: Build python
       shell: bash
       run: |
         VERSION=$(./scripts/version.sh)
@@ -172,7 +172,7 @@ jobs:
         echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
         echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
-    - name: upload artefacts
+    - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
@@ -186,15 +186,15 @@ jobs:
     environment: build
 
     steps:
-    - name: check out sources
+    - name: Check out sources
       uses: actions/checkout@v7
 
-    - name: set up Python 3
+    - name: Set up Python 3
       uses: actions/setup-python@v7
       with:
         python-version: '3.12'
 
-    - name: check out build support scripts
+    - name: Check out build support scripts
       shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
@@ -211,7 +211,7 @@ jobs:
       env:
         ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
 
-    - name: build python
+    - name: Build python
       shell: bash
       run: |
         VERSION=$(./scripts/version.sh)
@@ -222,7 +222,7 @@ jobs:
         echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
         echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
-    - name: upload artefacts
+    - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
@@ -236,15 +236,15 @@ jobs:
     environment: build
 
     steps:
-    - name: check out sources
+    - name: Check out sources
       uses: actions/checkout@v7
 
-    - name: set up Python 3
+    - name: Set up Python 3
       uses: actions/setup-python@v7
       with:
         python-version: '3.12'
 
-    - name: check out build support scripts
+    - name: Check out build support scripts
       shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
@@ -256,12 +256,12 @@ jobs:
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
 
-    - name: install build requirements
+    - name: Install build requirements
       shell: bash
       run: |
         brew install openssl xz gdbm cmake wget pkg-config
 
-    - name: build python
+    - name: Build python
       shell: bash
       run: |
         VERSION=$(./scripts/version.sh)
@@ -270,7 +270,7 @@ jobs:
         echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
         echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
-    - name: upload artefacts
+    - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
@@ -285,15 +285,15 @@ jobs:
     environment: build
 
     steps:
-    - name: check out sources
+    - name: Check out sources
       uses: actions/checkout@v7
 
-    - name: set up Python 3
+    - name: Set up Python 3
       uses: actions/setup-python@v7
       with:
         python-version: '3.12'
 
-    - name: check out build support scripts
+    - name: Check out build support scripts
       shell: bash
       run: |
         export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
@@ -305,13 +305,13 @@ jobs:
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
 
-    - name: install build requirements
+    - name: Install build requirements
       shell: bash
       run: |
         brew trust aws/tap
         brew install openssl xz gdbm cmake wget pkg-config
 
-    - name: build python
+    - name: Build python
       shell: bash
       run: |
         VERSION=$(./scripts/version.sh)
@@ -320,7 +320,7 @@ jobs:
         echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
         echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
-    - name: upload artefacts
+    - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
