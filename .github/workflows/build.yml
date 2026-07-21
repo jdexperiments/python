@@ -6,6 +6,9 @@ on:
     tags:
     - 'v*'
 
+
+
+
 jobs:
   wait-dependencies:
     runs-on: ubuntu-24.04
@@ -27,11 +30,16 @@ jobs:
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
+        echo "Setting up target build variables"
+        BUILD_VERSION=$( python3 package.py "version-combined" )
+        echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         python3 package.py wait-dependencies
+
 
   build-python-linux-x86_64:
     runs-on: ubuntu-24.04
@@ -54,10 +62,16 @@ jobs:
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
+        echo "Setting up target build variables"
+        BUILD_VERSION=$( python3 package.py "version-combined" )
+        BUILD_TARGET="macos-x86_64"
+        echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
+        echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
 
     - name: Install build requirements
       run: |
@@ -67,19 +81,16 @@ jobs:
     - name: Build python
       shell: bash
       run: |
-        VERSION=$(./scripts/version.sh)
-        export TARGET_TUPLE="linux-x86_64"
         ./scripts/python/build.sh
-        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
-        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
     - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
-        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
-        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
+
 
   build-python-linux-arm64:
     runs-on: ubuntu-24.04-arm
@@ -102,10 +113,16 @@ jobs:
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
+        echo "Setting up target build variables"
+        BUILD_VERSION=$( python3 package.py "version-combined" )
+        BUILD_TARGET="linux-arm64"
+        echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
+        echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
 
     - name: Install build requirements
       shell: bash
@@ -116,19 +133,16 @@ jobs:
     - name: Build python
       shell: bash
       run: |
-        VERSION=$(./scripts/version.sh)
-        export TARGET_TUPLE="linux-arm64"
         ./scripts/python/build.sh
-        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
-        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
     - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
-        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
-        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
+
 
   build-python-win-arm64:
     runs-on: windows-11-vs2026-arm
@@ -151,10 +165,16 @@ jobs:
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
+        echo "Setting up target build variables"
+        BUILD_VERSION=$( python3 package.py "version-combined" )
+        BUILD_TARGET="win-arm64"
+        echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
+        echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
 
     - name: Setup MSVC developer command prompt
       uses: ilammy/msvc-dev-cmd@v1
@@ -164,21 +184,18 @@ jobs:
     - name: Build python
       shell: bash
       run: |
-        VERSION=$(./scripts/version.sh)
         export WINDOWS_BUILD="arm64"
         export WINDOWS_PCPKG_TUPLE="arm64-windows"
-        export TARGET_TUPLE="windows-arm64"
         ./scripts/python/build.sh
-        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
-        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
     - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
-        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
-        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
+
 
   build-python-win-x86_64:
     runs-on: windows-2025-vs2026
@@ -201,10 +218,16 @@ jobs:
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
+        echo "Setting up target build variables"
+        BUILD_VERSION=$( python3 package.py "version-combined" )
+        BUILD_TARGET="win-x86_64"
+        echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
+        echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
 
     - name: Setup MSVC developer command prompt
       uses: ilammy/msvc-dev-cmd@v1
@@ -214,21 +237,18 @@ jobs:
     - name: Build python
       shell: bash
       run: |
-        VERSION=$(./scripts/version.sh)
         export WINDOWS_BUILD="x64"
         export WINDOWS_PCPKG_TUPLE="x64-windows"
-        export TARGET_TUPLE="windows-x86_64"
         ./scripts/python/build.sh
-        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
-        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
     - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
-        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
-        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
+
 
   build-python-macos-arm64:
     runs-on: macos-15
@@ -251,10 +271,16 @@ jobs:
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
+        echo "Setting up target build variables"
+        BUILD_VERSION=$( python3 package.py "version-combined" )
+        BUILD_TARGET="macos-arm64"
+        echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
+        echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
 
     - name: Install build requirements
       shell: bash
@@ -264,17 +290,13 @@ jobs:
     - name: Build python
       shell: bash
       run: |
-        VERSION=$(./scripts/version.sh)
-        export TARGET_TUPLE="macos-arm64"
         ./scripts/python/build.sh
-        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
-        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
     - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
-        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
-        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
 
@@ -300,10 +322,16 @@ jobs:
         export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
         export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
         export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
+        echo "Setting up target build variables"
+        BUILD_VERSION=$( python3 package.py "version-combined" )
+        BUILD_TARGET="macos-x86_64"
+        echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
+        echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
 
     - name: Install build requirements
       shell: bash
@@ -314,16 +342,56 @@ jobs:
     - name: Build python
       shell: bash
       run: |
-        VERSION=$(./scripts/version.sh)
-        export TARGET_TUPLE="macos-x86_64"
         ./scripts/python/build.sh
-        echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
-        echo "TARGET=$TARGET_TUPLE" >> $GITHUB_ENV
 
     - name: Upload artefacts
       uses: actions/upload-artifact@v7
       with:
-        name: python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
-        path: artefacts/python-${{env.PROJECT_VERSION}}-${{env.TARGET}}.tar.bz2
+        name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
+
+
+  all-build:
+    runs-on: ubuntu-24.04
+    environment: build
+    needs:
+      build-python-linux-arm64
+      build-python-linux-x86_64
+      build-python-win-arm64
+      build-python-win-x86_64
+      build-python-macos-arm64
+      build-python-macos-x86_64
+
+    steps:
+    - name: Check out sources
+      uses: actions/checkout@v7
+
+    - name: Set up Python 3
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.12'
+
+    - name: Check out build support scripts
+      shell: bash
+      run: |
+        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
+        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
+        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
+        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        echo "Cloning build support library"
+        mkdir -p frost_support 
+        pushd frost_support
+        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        popd
+        echo "Setting up target build variables"
+        BUILD_VERSION=$( python3 package.py "version-combined" )
+        BUILD_TARGET="macos-x86_64"
+        echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
+        echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
+
+    - name: On all build
+      shell: bash
+      run: |
+        echo "TOFO: all platforms are now build"
