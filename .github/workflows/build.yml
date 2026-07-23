@@ -150,7 +150,7 @@ jobs:
         -NoNewWindow -Wait
 
     - name: Setup MSVC developer command prompt
-      uses: ilammy/msvc-dev-cmd@v1
+      uses: TheMrMilchmann/setup-msvc-dev@v6
       env:
         ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
 
@@ -197,7 +197,7 @@ jobs:
         python-version: '3.12'
 
     - name: Setup MSVC developer command prompt
-      uses: ilammy/msvc-dev-cmd@v1
+      uses: TheMrMilchmann/setup-msvc-dev@v6
       env:
         ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
 
