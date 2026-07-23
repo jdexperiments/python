@@ -68,12 +68,12 @@ if [[ "$BUILD_TARGET" == win-* ]]; then
     echo "TODO:"
     exit 1
 else
-    ARCHIVE_NAME="python-$VERSION-$TARGET_TUPLE"
+    ARCHIVE_NAME="python-$BUILD_VERSION-$BUILD_TARGET"
     ABS_ARCHIVE="$ARTEFACTS_DIR/$ARCHIVE_NAME.tar.bz2"
     if [ ! -f "$ABS_ARCHIVE" ]; then
         echo "Building archive $ABS_ARCHIVE"
         pushd "$CLANG_INSTALL_DIR"
-        tar -cjf "$PYTHON_INSTALL_DIR" *
+        tar -cjf "$ABS_ARCHIVE" *
         popd
     fi
 fi
