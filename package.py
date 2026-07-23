@@ -4,17 +4,12 @@ from frost_support import tool
 # declare package description
 class Description( description.Description ):
 
-    # setup version we are building right now
-    NAME           = "python"
-    VERSION        = "3.16.4"
-    VERSION_SUFFIX = "1"
-
-    # setup tool build
+    # setup build
     def __init__( self ):
         super().__init__(
-            name           = Description.NAME,
-            version        = Description.VERSION,
-            version_suffix = Description.VERSION_SUFFIX
+            name           = "python",
+            version        = "3.16.4",
+            version_suffix = "1"
         )
 
 # run as tool

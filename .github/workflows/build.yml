@@ -1,13 +1,7 @@
 name: Build python
 
 on:
-  push:
-    branches: [ "main" ]
-    tags:
-    - 'v*'
-
-
-
+  workflow_dispatch
 
 jobs:
   wait-dependencies:
@@ -26,10 +20,9 @@ jobs:
     - name: Wait for dependencies
       shell: bash
       run: |
-        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
-        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
-        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
-        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
+        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
+        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
@@ -55,13 +48,17 @@ jobs:
       with:
         python-version: '3.12'
 
-    - name: Check out build support scripts
+    - name: Install build requirements
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
+
+    - name: Build python
       shell: bash
       run: |
-        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
-        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
-        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
-        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
+        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
+        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
@@ -72,15 +69,7 @@ jobs:
         BUILD_TARGET="macos-x86_64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
-
-    - name: Install build requirements
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
-
-    - name: Build python
-      shell: bash
-      run: |
+        export BUILD_CPU_CORES=$(nproc)
         ./scripts/python/build.sh
 
     - name: Upload artefacts
@@ -106,13 +95,18 @@ jobs:
       with:
         python-version: '3.12'
 
-    - name: Check out build support scripts
+    - name: Install build requirements
       shell: bash
       run: |
-        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
-        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
-        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
-        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        sudo apt-get update
+        sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
+
+    - name: Build python
+      shell: bash
+      run: |
+        export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
+        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
+        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
@@ -123,16 +117,7 @@ jobs:
         BUILD_TARGET="linux-arm64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
-
-    - name: Install build requirements
-      shell: bash
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
-
-    - name: Build python
-      shell: bash
-      run: |
+        export BUILD_CPU_CORES=$(nproc)
         ./scripts/python/build.sh
 
     - name: Upload artefacts
@@ -158,13 +143,17 @@ jobs:
       with:
         python-version: '3.12'
 
-    - name: Check out build support scripts
+    - name: Setup MSVC developer command prompt
+      uses: ilammy/msvc-dev-cmd@v1
+      env:
+        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
+
+    - name: Build python
       shell: bash
       run: |
-        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
-        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
-        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
-        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
+        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
+        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
@@ -175,15 +164,6 @@ jobs:
         BUILD_TARGET="win-arm64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
-
-    - name: Setup MSVC developer command prompt
-      uses: ilammy/msvc-dev-cmd@v1
-      env:
-        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
-
-    - name: Build python
-      shell: bash
-      run: |
         export WINDOWS_BUILD="arm64"
         export WINDOWS_PCPKG_TUPLE="arm64-windows"
         ./scripts/python/build.sh
@@ -211,13 +191,17 @@ jobs:
       with:
         python-version: '3.12'
 
-    - name: Check out build support scripts
+    - name: Setup MSVC developer command prompt
+      uses: ilammy/msvc-dev-cmd@v1
+      env:
+        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
+
+    - name: Build python
       shell: bash
       run: |
-        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
-        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
-        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
-        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
+        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
+        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
@@ -228,15 +212,6 @@ jobs:
         BUILD_TARGET="win-x86_64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
-
-    - name: Setup MSVC developer command prompt
-      uses: ilammy/msvc-dev-cmd@v1
-      env:
-        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
-
-    - name: Build python
-      shell: bash
-      run: |
         export WINDOWS_BUILD="x64"
         export WINDOWS_PCPKG_TUPLE="x64-windows"
         ./scripts/python/build.sh
@@ -264,13 +239,17 @@ jobs:
       with:
         python-version: '3.12'
 
-    - name: Check out build support scripts
+    - name: Install build requirements
       shell: bash
       run: |
-        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
-        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
-        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
-        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        brew install openssl xz gdbm cmake wget pkg-config
+
+    - name: Build python
+      shell: bash
+      run: |
+        export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
+        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
+        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
@@ -281,15 +260,7 @@ jobs:
         BUILD_TARGET="macos-arm64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
-
-    - name: Install build requirements
-      shell: bash
-      run: |
-        brew install openssl xz gdbm cmake wget pkg-config
-
-    - name: Build python
-      shell: bash
-      run: |
+        export BUILD_CPU_CORES=$(sysctl -n hw.ncpu)
         ./scripts/python/build.sh
 
     - name: Upload artefacts
@@ -315,13 +286,18 @@ jobs:
       with:
         python-version: '3.12'
 
-    - name: Check out build support scripts
+    - name: Install build requirements
       shell: bash
       run: |
-        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
-        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
-        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
-        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        brew trust aws/tap
+        brew install openssl xz gdbm cmake wget pkg-config
+
+    - name: Build python
+      shell: bash
+      run: |
+        export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
+        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
+        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
@@ -332,16 +308,7 @@ jobs:
         BUILD_TARGET="macos-x86_64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
-
-    - name: Install build requirements
-      shell: bash
-      run: |
-        brew trust aws/tap
-        brew install openssl xz gdbm cmake wget pkg-config
-
-    - name: Build python
-      shell: bash
-      run: |
+        export BUILD_CPU_CORES=$(sysctl -n hw.ncpu)
         ./scripts/python/build.sh
 
     - name: Upload artefacts
@@ -353,7 +320,7 @@ jobs:
         archive: false
 
 
-  all-build:
+  release-package:
     runs-on: ubuntu-24.04
     environment: build
     needs: [ build-python-linux-arm64, build-python-linux-x86_64, build-python-win-arm64, build-python-win-x86_64, build-python-macos-arm64, build-python-macos-x86_64 ]
@@ -370,20 +337,18 @@ jobs:
     - name: Check out build support scripts
       shell: bash
       run: |
-        export FROST_BUILDER_REPO_URL="${{ vars.FROST_BUILDER_REPO_URL }}"
-        export FROST_BUILDER_REPO_USER="${{ vars.FROST_BUILDER_REPO_USER }}"
-        export FROST_BUILDER_REPO_PREFIX="${{ vars.FROST_BUILDER_REPO_PREFIX }}"
-        export FROST_BUILDER_REPO_SUPPORT="${{ vars.FROST_BUILDER_REPO_SUPPORT }}"
+        export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
+        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
+        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
         git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
         popd
         echo "Setting up target build variables"
-        BUILD_VERSION=$( python3 package.py "version-combined" )
-        BUILD_TARGET="macos-x86_64"
-        echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
-        echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
+
+        # TODO: rework
+        echo "upload of package not implemented yet"
 
     - name: On all build
       shell: bash
