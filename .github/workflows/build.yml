@@ -375,7 +375,7 @@ jobs:
 
     - name: Upload release
       run: |
-        gh release create "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-linux-x86_64.tar.bz2"
+        gh release create --clobber "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-linux-x86_64.tar.bz2"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -417,7 +417,7 @@ jobs:
 
     - name: Upload release
       run: |
-        gh release create "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-linux-arm64.tar.bz2"
+        gh release create --clobber "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-linux-arm64.tar.bz2"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -459,7 +459,7 @@ jobs:
 
     - name: Upload release
       run: |
-        gh release create "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-win-x86_64.tar.bz2"
+        gh release create --clobber "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-win-x86_64.tar.bz2"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -501,7 +501,7 @@ jobs:
 
     - name: Upload release
       run: |
-        gh release create "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-win-arm64.tar.bz2"
+        gh release create --clobber "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-win-arm64.tar.bz2"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -543,7 +543,7 @@ jobs:
 
     - name: Upload release
       run: |
-        gh release create "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-macos-x86_64.tar.bz2"
+        gh release create --clobber "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-macos-x86_64.tar.bz2"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -585,7 +585,7 @@ jobs:
 
     - name: Upload release
       run: |
-        gh release create "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-macos-arm64.tar.bz2"
+        gh release create --clobber "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-macos-arm64.tar.bz2"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
