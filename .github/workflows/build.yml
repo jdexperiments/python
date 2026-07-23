@@ -151,6 +151,8 @@ jobs:
 
     - name: Setup MSVC developer command prompt
       uses: TheMrMilchmann/setup-msvc-dev@v4
+      with:
+        arch: arm64
       env:
         ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
 
@@ -198,6 +200,8 @@ jobs:
 
     - name: Setup MSVC developer command prompt
       uses: TheMrMilchmann/setup-msvc-dev@v4
+      with:
+        arch: x64
       env:
         ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
 
