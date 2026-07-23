@@ -641,16 +641,3 @@ jobs:
         gh release upload "v${{ env.BUILD_VERSION }}-manifest.json" "$MANIFEST_NAME" --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  trigger-scheduler:
-    runs-on: ubuntu-slim
-    environment: build
-    # if: startsWith(github.ref, 'refs/tags/')
-    needs: [ release-all ]
-
-    steps:
-    - name: Trigger build scheduler
-      shell: bash
-      run: |
-        echo "implement tiggering..."
-        echo "run id: ${{ github.run_id }}"
