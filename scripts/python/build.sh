@@ -54,8 +54,6 @@ mkdir -p "$PYTHON_BUILD_DIR"
 # build python
 if [[ "$BUILD_TARGET" == win-* ]]; then
     pushd "$PYTHON_SRC_DIR/PCbuild" > /dev/null
-    echo "TODO:"
-    exit 1
     if [ "$$BUILD_TARGET" = "win-x86_64" ]; then
         PPF="x64"
         TEMP_INSTALL="$PYTHON_SRC_DIR/PCbuild/x64"
