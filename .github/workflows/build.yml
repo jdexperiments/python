@@ -119,8 +119,8 @@ jobs:
 
     - name: Build python
       env:
-        CC: "zig cc -target x86_64-linux-gnu.2.28"
-        CXX: "zig c++ -target x86_64-linux-gnu.2.28"
+        CC: "zig cc -target aarch64-linux-gnu.2.28"
+        CXX: "zig c++ -target aarch64-linux-gnu.2.28"
         CFLAGS: "-O3"
       shell: bash
       run: |
