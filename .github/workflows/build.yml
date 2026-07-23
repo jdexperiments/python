@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   wait-dependencies:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-slim
     environment: build
 
     steps:
@@ -334,10 +334,10 @@ jobs:
         echo "done"
 
   release-linux-x86_64:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-slim
     environment: build
     # if: startsWith(github.ref, 'refs/tags/')
-    needs: [ build-linux-x86_64, wait-build-all ]
+    needs: [ wait-build-all ]
 
     steps:
     - name: Check out sources
@@ -360,14 +360,14 @@ jobs:
         popd
         echo "Setting up target build variables"
         export BUILD_VERSION=$( python3 package.py "version-combined" )
-        export BUILD_TARGET="macos-x86_64"
+        export BUILD_TARGET="linux-x86_64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
 
     - name: Download artefact
       uses: actions/download-artifact@v7
       with:
-        name: python-${{env.BUILD_VERSION}}-linux-x86-64.tar.bz2
+        name: python-${{env.BUILD_VERSION}}-linux-x86_64.tar.bz2
 
     - name: Upload release
       run: |
@@ -375,10 +375,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  release-package:
-    runs-on: ubuntu-24.04
+  release-linux-arm64:
+    runs-on: ubuntu-slim
     environment: build
-    if: startsWith(github.ref, 'refs/tags/')
+    # if: startsWith(github.ref, 'refs/tags/')
     needs: [ wait-build-all ]
 
     steps:
@@ -390,12 +390,10 @@ jobs:
       with:
         python-version: '3.12'
 
-    - name: Check out build support scripts
+    - name: Setup package
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
-        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
-        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
@@ -403,12 +401,30 @@ jobs:
         git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
+        export BUILD_VERSION=$( python3 package.py "version-combined" )
+        export BUILD_TARGET="linux-arm64"
+        echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
+        echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
 
-        # TODO: rework
-        export PACKAGE_RELEASE_TAG="${{ github.ref_name }}"
-        echo "upload of package not implemented yet but ref is $PACKAGE_RELEASE_TAG"
+    - name: Download artefact
+      uses: actions/download-artifact@v7
+      with:
+        name: python-${{env.BUILD_VERSION}}-linux-x86_64.tar.bz2
 
-    - name: On all build
+    - name: Upload release
+      run: |
+        gh release create "v${{ env.BUILD_VERSION }}-${{env.BUILD_TARGET}}" -n "release from pipeline" -t "v${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}" "python-${{env.BUILD_VERSION}}-linux-x86-64.tar.bz2"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-all:
+    runs-on: ubuntu-slim
+    environment: build
+    # if: startsWith(github.ref, 'refs/tags/')
+    needs: [ release-linux-x86_64, release-linux-arm64 ]
+
+    steps:
+    - name: Release package
       shell: bash
       run: |
-        echo "TOFO: all platforms are now build"
+        echo "TODO"
