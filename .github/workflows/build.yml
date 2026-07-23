@@ -67,8 +67,8 @@ jobs:
         git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
-        BUILD_VERSION=$( python3 package.py "version-combined" )
-        BUILD_TARGET="macos-x86_64"
+        export BUILD_VERSION=$( python3 package.py "version-combined" )
+        export BUILD_TARGET="macos-x86_64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
         export BUILD_CPU_CORES=$(nproc)
@@ -116,8 +116,8 @@ jobs:
         git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
-        BUILD_VERSION=$( python3 package.py "version-combined" )
-        BUILD_TARGET="linux-arm64"
+        export BUILD_VERSION=$( python3 package.py "version-combined" )
+        export BUILD_TARGET="linux-arm64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
         export BUILD_CPU_CORES=$(nproc)
@@ -164,8 +164,8 @@ jobs:
         git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
-        BUILD_VERSION=$( python3 package.py "version-combined" )
-        BUILD_TARGET="win-arm64"
+        export BUILD_VERSION=$( python3 package.py "version-combined" )
+        export BUILD_TARGET="win-arm64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
         export WINDOWS_BUILD="arm64"
@@ -213,8 +213,8 @@ jobs:
         git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
-        BUILD_VERSION=$( python3 package.py "version-combined" )
-        BUILD_TARGET="win-x86_64"
+        export BUILD_VERSION=$( python3 package.py "version-combined" )
+        export BUILD_TARGET="win-x86_64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
         export WINDOWS_BUILD="x64"
@@ -262,8 +262,8 @@ jobs:
         git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
-        BUILD_VERSION=$( python3 package.py "version-combined" )
-        BUILD_TARGET="macos-arm64"
+        export BUILD_VERSION=$( python3 package.py "version-combined" )
+        export BUILD_TARGET="macos-arm64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
         export BUILD_CPU_CORES=$(sysctl -n hw.ncpu)
@@ -311,8 +311,8 @@ jobs:
         git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
-        BUILD_VERSION=$( python3 package.py "version-combined" )
-        BUILD_TARGET="macos-x86_64"
+        export BUILD_VERSION=$( python3 package.py "version-combined" )
+        export BUILD_TARGET="macos-x86_64"
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
         export BUILD_CPU_CORES=$(sysctl -n hw.ncpu)
@@ -330,6 +330,7 @@ jobs:
   release-package:
     runs-on: ubuntu-24.04
     environment: build
+    if: startsWith(github.ref, 'refs/tags/')
     needs: [ build-python-linux-arm64, build-python-linux-x86_64, build-python-win-arm64, build-python-win-x86_64, build-python-macos-arm64, build-python-macos-x86_64 ]
 
     steps:
@@ -356,7 +357,8 @@ jobs:
         echo "Setting up target build variables"
 
         # TODO: rework
-        echo "upload of package not implemented yet"
+        export PACKAGE_RELEASE_TAG="${{ github.ref_name }}"
+        echo "upload of package not implemented yet but ref is $PACKAGE_RELEASE_TAG"
 
     - name: On all build
       shell: bash
