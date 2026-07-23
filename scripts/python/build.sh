@@ -52,39 +52,43 @@ fi
 mkdir -p "$PYTHON_BUILD_DIR"
 
 # build python
-pushd "$PYTHON_BUILD_DIR" > /dev/null
 if [[ "$BUILD_TARGET" == win-* ]]; then
+    pushd "$PYTHON_SRC_DIR/PCbuild" > /dev/null
     echo "TODO:"
     exit 1
+    if [ "$$BUILD_TARGET" = "win-x86_64" ]; then
+        PPF="x64"
+        TEMP_INSTALL="$PYTHON_SRC_DIR/PCbuild/x64"
+    elif [ "$$BUILD_TARGET" = "win-arm64" ]; then
+        PPF="arm64"
+        TEMP_INSTALL="$PYTHON_SRC_DIR/PCbuild/x64"
+    else
+        echo "failed: unknown target"
+    fi
+    ./build.bat -e -p $PPF
+    popd > /dev/null
 else
+    pushd "$PYTHON_BUILD_DIR" > /dev/null
     $PYTHON_SRC_DIR/configure --prefix="$PYTHON_INSTALL_DIR" --enable-optimizations --with-lto 
     make -j$BUILD_CPU_CORES
     make install
+    popd > /dev/null
+    TEMP_INSTALL="$PYTHON_INSTALL_DIR"
 fi
-popd > /dev/null
+
+# TODO: add license file
+
+# TODO: add manifest
 
 # create package
-if [[ "$BUILD_TARGET" == win-* ]]; then
-    echo "TODO:"
-    exit 1
-else
-    if [ ! -d "artifacts" ]; then
-        mkdir -p "artifacts"
-    fi
-    ARCHIVE_NAME="python-$BUILD_VERSION-$BUILD_TARGET"
-    ABS_ARCHIVE="artifacts/$ARCHIVE_NAME.tar.bz2"
-    if [ ! -f "$ABS_ARCHIVE" ]; then
-        echo "Building archive $ABS_ARCHIVE"
-        pushd "$CLANG_INSTALL_DIR"
-        tar -cjf "$ABS_ARCHIVE" *
-        popd
-    fi
+if [ ! -d "artifacts" ]; then
+    mkdir -p "artifacts"
 fi
-
-# TODO: install python
-
-# TODO: package description
-
-# TODO: package license
-
-# TODO: package python
+ARCHIVE_NAME="python-$BUILD_VERSION-$BUILD_TARGET"
+ABS_ARCHIVE="artifacts/$ARCHIVE_NAME.tar.bz2"
+if [ ! -f "$ABS_ARCHIVE" ]; then
+    echo "Building archive $ABS_ARCHIVE"
+    pushd "$TEMP_INSTALL" > /dev/null
+    tar -cjf "$ABS_ARCHIVE" *
+    popd > /dev/null
+fi
