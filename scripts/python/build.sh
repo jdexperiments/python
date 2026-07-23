@@ -62,6 +62,7 @@ if [[ "$BUILD_TARGET" == win-* ]]; then
         TEMP_INSTALL="$PYTHON_SRC_DIR/PCbuild/x64"
     else
         echo "failed: unknown target"
+        exit 1
     fi
     ./build.bat -e -p $PPF
     popd > /dev/null
@@ -83,7 +84,7 @@ if [ ! -d "artifacts" ]; then
     mkdir -p "artifacts"
 fi
 ARCHIVE_NAME="python-$BUILD_VERSION-$BUILD_TARGET"
-ABS_ARCHIVE="artifacts/$ARCHIVE_NAME.tar.bz2"
+ABS_ARCHIVE="$(cd artifacts && pwd)/$ARCHIVE_NAME.tar.bz2"
 if [ ! -f "$ABS_ARCHIVE" ]; then
     echo "Building archive $ABS_ARCHIVE"
     pushd "$TEMP_INSTALL" > /dev/null
