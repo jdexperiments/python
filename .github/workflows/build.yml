@@ -337,7 +337,7 @@ jobs:
     runs-on: ubuntu-24.04
     environment: build
     # if: startsWith(github.ref, 'refs/tags/')
-    needs: [ wait-build-all ]
+    needs: [ build-macos-x86_64, wait-build-all ]
 
     steps:
     - name: Check out sources
