@@ -74,11 +74,11 @@ jobs:
         export BUILD_CPU_CORES=$(nproc)
         ./scripts/python/build.sh
 
-    - name: Upload artefacts
+    - name: Upload artifacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
-        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artifacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
 
@@ -123,11 +123,11 @@ jobs:
         export BUILD_CPU_CORES=$(nproc)
         ./scripts/python/build.sh
 
-    - name: Upload artefacts
+    - name: Upload artifacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
-        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artifacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
 
@@ -172,11 +172,11 @@ jobs:
         export WINDOWS_PCPKG_TUPLE="arm64-windows"
         ./scripts/python/build.sh
 
-    - name: Upload artefacts
+    - name: Upload artifacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
-        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artifacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
 
@@ -221,11 +221,11 @@ jobs:
         export WINDOWS_PCPKG_TUPLE="x64-windows"
         ./scripts/python/build.sh
 
-    - name: Upload artefacts
+    - name: Upload artifacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
-        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artifacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
 
@@ -269,11 +269,11 @@ jobs:
         export BUILD_CPU_CORES=$(sysctl -n hw.ncpu)
         ./scripts/python/build.sh
 
-    - name: Upload artefacts
+    - name: Upload artifacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
-        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artifacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
 
@@ -318,11 +318,11 @@ jobs:
         export BUILD_CPU_CORES=$(sysctl -n hw.ncpu)
         ./scripts/python/build.sh
 
-    - name: Upload artefacts
+    - name: Upload artifacts
       uses: actions/upload-artifact@v7
       with:
         name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
-        path: artefacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: artifacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
         archive: false
 

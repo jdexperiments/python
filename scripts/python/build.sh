@@ -68,8 +68,11 @@ if [[ "$BUILD_TARGET" == win-* ]]; then
     echo "TODO:"
     exit 1
 else
+    if [ ! -d "artifacts" ]; then
+        mkdir -p "artifacts"
+    fi
     ARCHIVE_NAME="python-$BUILD_VERSION-$BUILD_TARGET"
-    ABS_ARCHIVE="artefacts/$ARCHIVE_NAME.tar.bz2"
+    ABS_ARCHIVE="artifacts/$ARCHIVE_NAME.tar.bz2"
     if [ ! -f "$ABS_ARCHIVE" ]; then
         echo "Building archive $ABS_ARCHIVE"
         pushd "$CLANG_INSTALL_DIR"
