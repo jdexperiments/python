@@ -69,7 +69,7 @@ if [[ "$BUILD_TARGET" == win-* ]]; then
     exit 1
 else
     ARCHIVE_NAME="python-$BUILD_VERSION-$BUILD_TARGET"
-    ABS_ARCHIVE="$ARTEFACTS_DIR/$ARCHIVE_NAME.tar.bz2"
+    ABS_ARCHIVE="artefacts/$ARCHIVE_NAME.tar.bz2"
     if [ ! -f "$ABS_ARCHIVE" ]; then
         echo "Building archive $ABS_ARCHIVE"
         pushd "$CLANG_INSTALL_DIR"
