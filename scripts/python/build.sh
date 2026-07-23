@@ -76,7 +76,7 @@ else
 fi
 
 # copy license file to artifacts
-cp "$PYTHON_SRC_DIR/LICENSE" "TEMP_INSTALL/LICENSE.python-$BUILD_VERSION"
+cp "$PYTHON_SRC_DIR/LICENSE" "$TEMP_INSTALL/LICENSE.python-$BUILD_VERSION"
 
 # TODO: add manifest
 
