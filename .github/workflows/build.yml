@@ -1,4 +1,4 @@
-name: Build python
+name: Build package
 
 on:
   workflow_dispatch
@@ -35,7 +35,7 @@ jobs:
         python3 package.py wait-dependencies
 
 
-  build-python-linux-x86_64:
+  build-linux-x86_64:
     runs-on: ubuntu-24.04
     needs: wait-dependencies
     environment: build
@@ -83,7 +83,7 @@ jobs:
         archive: false
 
 
-  build-python-linux-arm64:
+  build-linux-arm64:
     runs-on: ubuntu-24.04-arm
     needs: wait-dependencies
     environment: build
@@ -132,7 +132,7 @@ jobs:
         archive: false
 
 
-  build-python-win-arm64:
+  build-win-arm64:
     runs-on: windows-11-vs2026-arm
     needs: wait-dependencies
     environment: build
@@ -187,7 +187,7 @@ jobs:
         archive: false
 
 
-  build-python-win-x86_64:
+  build-win-x86_64:
     runs-on: windows-2025-vs2026
     needs: wait-dependencies
     environment: build
@@ -236,7 +236,7 @@ jobs:
         archive: false
 
 
-  build-python-macos-arm64:
+  build-macos-arm64:
     runs-on: macos-15
     needs: wait-dependencies
     environment: build
@@ -284,7 +284,7 @@ jobs:
         archive: false
 
 
-  build-python-macos-x86_64:
+  build-macos-x86_64:
     runs-on: macos-15-intel
     needs: wait-dependencies
     environment: build
@@ -333,11 +333,17 @@ jobs:
         archive: false
 
 
+  build-all:
+    runs-on: ubuntu-24.04
+    environment: build
+    needs: [ build-linux-arm64, build-linux-x86_64, build-win-arm64, build-win-x86_64, build-macos-arm64, build-macos-x86_64 ]
+
+
   release-package:
     runs-on: ubuntu-24.04
     environment: build
     if: startsWith(github.ref, 'refs/tags/')
-    needs: [ build-python-linux-arm64, build-python-linux-x86_64, build-python-win-arm64, build-python-win-x86_64, build-python-macos-arm64, build-python-macos-x86_64 ]
+    needs: [ build-linux-arm64, build-linux-x86_64, build-win-arm64, build-win-x86_64, build-macos-arm64, build-macos-x86_64 ]
 
     steps:
     - name: Check out sources
