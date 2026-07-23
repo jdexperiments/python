@@ -56,10 +56,10 @@ if [[ "$BUILD_TARGET" == win-* ]]; then
     pushd "$PYTHON_SRC_DIR" > /dev/null
     if [ "$BUILD_TARGET" = "win-x86_64" ]; then
         PPF="x64"
-        TEMP_INSTALL="$PYTHON_SRC_DIR/PCbuild/x64"
+        TEMP_INSTALL="$PYTHON_SRC_DIR/PCbuild/amd64"
     elif [ "$BUILD_TARGET" = "win-arm64" ]; then
         PPF="arm64"
-        TEMP_INSTALL="$PYTHON_SRC_DIR/PCbuild/x64"
+        TEMP_INSTALL="$PYTHON_SRC_DIR/PCbuild/arm64"
     else
         echo "failed: unknown target"
         exit 1
