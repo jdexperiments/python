@@ -36,7 +36,7 @@ jobs:
 
 
   build-python-linux-x86_64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: wait-dependencies
     environment: build
 
@@ -84,7 +84,7 @@ jobs:
 
 
   build-python-linux-arm64:
-    runs-on: ubuntu-22.04-arm
+    runs-on: ubuntu-24.04-arm
     needs: wait-dependencies
     environment: build
 
