@@ -71,13 +71,21 @@ if [[ "$BUILD_TARGET" == win-* ]]; then
     export PYTHONINCLUDE="$PYTHON_SRC_DIR/Include"
     python3 PC/layout/main.py --build "$TEMP_INSTALL_WIN" --source . --copy "$TARGET_INSTALL_WIN" --preset-default
     popd > /dev/null
+
+    # layout structure to be a unix like installation
+    LAYOUTED_INSTALL="temp.build/layouted-install"
+    if [ ! -d "$LAYOUTED_INSTALL" ]; then
+        mkdir -p "$LAYOUTED_INSTALL"
+    fi
+    LAYOUTED_INSTALL_WIN="$(cygpath -w "$LAYOUTED_INSTALL")"
+    python3 scripts/python/windows-layout.py "$PYTHON_INSTALL_DIR" "$LAYOUTED_INSTALL_WIN"
 else
     pushd "$PYTHON_BUILD_DIR" > /dev/null
     $PYTHON_SRC_DIR/configure --prefix="$PYTHON_INSTALL_DIR" --enable-optimizations --with-lto 
     make -j$BUILD_CPU_CORES
     make install
     popd > /dev/null
-    TEMP_INSTALL="$PYTHON_INSTALL_DIR"
+    LAYOUTED_INSTALL="$PYTHON_INSTALL_DIR"
 fi
 
 # copy license file to artifacts
@@ -93,7 +101,7 @@ ARCHIVE_NAME="python-$BUILD_VERSION-$BUILD_TARGET"
 ABS_ARCHIVE="$(cd artifacts && pwd)/$ARCHIVE_NAME.tar.bz2"
 if [ ! -f "$ABS_ARCHIVE" ]; then
     echo "Building archive $ABS_ARCHIVE"
-    pushd "$PYTHON_INSTALL_DIR" > /dev/null
+    pushd "$LAYOUTED_INSTALL" > /dev/null
     tar -cjf "$ABS_ARCHIVE" *
     popd > /dev/null
 fi
