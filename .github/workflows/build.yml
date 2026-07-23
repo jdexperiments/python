@@ -36,7 +36,7 @@ jobs:
 
 
   build-python-linux-x86_64:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     needs: wait-dependencies
     environment: build
 
@@ -54,16 +54,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
 
-    - name: Setup Zig compiler
-      uses: goto-bus-stop/setup-zig@v2
-      with:
-        version: 0.16.0
-
     - name: Build python
-      env:
-        CC: "zig cc -target x86_64-linux-gnu.2.28"
-        CXX: "zig c++ -target x86_64-linux-gnu.2.28"
-        CFLAGS: "-O3"
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
@@ -93,7 +84,7 @@ jobs:
 
 
   build-python-linux-arm64:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-22.04-arm
     needs: wait-dependencies
     environment: build
 
@@ -112,16 +103,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
 
-    - name: Setup Zig compiler
-      uses: goto-bus-stop/setup-zig@v2
-      with:
-        version: 0.16.0
-
     - name: Build python
-      env:
-        CC: "zig cc -target aarch64-linux-gnu.2.28"
-        CXX: "zig c++ -target aarch64-linux-gnu.2.28"
-        CFLAGS: "-O3"
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
