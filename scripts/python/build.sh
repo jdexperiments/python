@@ -8,7 +8,7 @@ REPO_ROOT="$(dirname "$(dirname "$(cd "$(dirname "$0")"; pwd)")")"
 
 # decalre python sources
 PYTHON_URL="https://github.com/python/cpython.git"
-PYTHON_VERSION="$( python3 package.py version )"
+PYTHON_VERSION="v$( python3 package.py version )"
 
 # declare pathes to python source installation
 PYTHON_SRC_DIR="$REPO_ROOT/temp.build/src-python"
