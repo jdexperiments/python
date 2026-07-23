@@ -369,7 +369,7 @@ jobs:
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
 
     - name: Download artefact
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: python-${{env.BUILD_VERSION}}-linux-x86_64.tar.bz2
 
@@ -411,7 +411,7 @@ jobs:
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
 
     - name: Download artefact
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: python-${{env.BUILD_VERSION}}-linux-x86_64.tar.bz2
 
