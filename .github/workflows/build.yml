@@ -52,9 +52,18 @@ jobs:
     - name: Install build requirements
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git build-essential musl-tools musl-dev
+        sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
+
+    - name: Setup Zig compiler
+      uses: goto-bus-stop/setup-zig@v2
+      with:
+        version: 0.16.0
 
     - name: Build python
+      env:
+        CC: "zig cc -target x86_64-linux-gnu.2.28"
+        CXX: "zig c++ -target x86_64-linux-gnu.2.28"
+        CFLAGS: "-O3"
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
@@ -72,8 +81,6 @@ jobs:
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
         export BUILD_CPU_CORES=$(nproc)
-        export CC="musl-gcc"
-        export CXX="musl-g++"
         ./scripts/python/build.sh
 
     - name: Upload artifacts
@@ -103,9 +110,18 @@ jobs:
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git build-essential musl-tools musl-dev
+        sudo apt-get install -y build-essential checkinstall libreadline-dev libgdbm-dev libssl-dev libsqlite3-dev tk-dev libncurses5-dev libffi-dev libreadline-dev libbz2-dev liblzma-dev zlib1g-dev git
+
+    - name: Setup Zig compiler
+      uses: goto-bus-stop/setup-zig@v2
+      with:
+        version: 0.16.0
 
     - name: Build python
+      env:
+        CC: "zig cc -target x86_64-linux-gnu.2.28"
+        CXX: "zig c++ -target x86_64-linux-gnu.2.28"
+        CFLAGS: "-O3"
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
@@ -123,8 +139,6 @@ jobs:
         echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
         echo "BUILD_TARGET=$BUILD_TARGET" >> $GITHUB_ENV
         export BUILD_CPU_CORES=$(nproc)
-        export CC="musl-gcc"
-        export CXX="musl-g++"
         ./scripts/python/build.sh
 
     - name: Upload artifacts
