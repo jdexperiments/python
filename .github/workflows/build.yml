@@ -3,6 +3,9 @@ name: Build package
 on:
   workflow_dispatch
 
+permissions:
+  contents: write
+
 jobs:
   wait-dependencies:
     runs-on: ubuntu-24.04
@@ -21,8 +24,6 @@ jobs:
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
-        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
-        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
@@ -58,8 +59,6 @@ jobs:
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
-        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
-        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
@@ -107,8 +106,6 @@ jobs:
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
-        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
-        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
@@ -161,8 +158,6 @@ jobs:
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
-        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
-        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
@@ -210,8 +205,6 @@ jobs:
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
-        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
-        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
@@ -259,8 +252,6 @@ jobs:
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
-        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
-        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
@@ -308,8 +299,6 @@ jobs:
       shell: bash
       run: |
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
-        export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
-        export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
         export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
@@ -333,7 +322,7 @@ jobs:
         archive: false
 
 
-  build-all:
+  wait-build-all:
     runs-on: ubuntu-24.04
     environment: build
     needs: [ build-linux-arm64, build-linux-x86_64, build-win-arm64, build-win-x86_64, build-macos-arm64, build-macos-x86_64 ]
@@ -344,11 +333,33 @@ jobs:
       run: |
         echo "done"
 
+  release-linux-x86_64:
+    runs-on: ubuntu-24.04
+    environment: build
+    # if: startsWith(github.ref, 'refs/tags/')
+    needs: [ wait-build-all ]
+
+    steps:
+      - name: download artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: python-${{env.BUILD_VERSION}}-linux-x86-64.tar.bz2
+
+      - name: upload release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "v${{env.BUILD_VERSION}}-linux-x86-64"
+          files: python-${{env.BUILD_VERSION}}-linux-x86-64.tar.bz2
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
   release-package:
     runs-on: ubuntu-24.04
     environment: build
     if: startsWith(github.ref, 'refs/tags/')
-    needs: [ build-all ]
+    needs: [ wait-build-all ]
 
     steps:
     - name: Check out sources
