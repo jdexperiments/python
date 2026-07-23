@@ -8,7 +8,7 @@ class Description( description.Description ):
     def __init__( self ):
         super().__init__(
             name           = "python",
-            version        = "3.16.4",
+            version        = "3.14.6",
             version_suffix = "1"
         )
 
