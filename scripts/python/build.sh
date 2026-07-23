@@ -94,7 +94,7 @@ cp "$PYTHON_SRC_DIR/LICENSE" "$LAYOUTED_INSTALL/LICENSE.python-$BUILD_VERSION"
 
 # add platform dependent manifest
 echo "Build platform manifest"
-python3 package.py version create-platform-manifest > "$LAYOUTED_INSTALL/MANIFEST.python-$BUILD_VERSION"
+python3 package.py create-platform-manifest > "$LAYOUTED_INSTALL/MANIFEST.python-$BUILD_VERSION"
 
 # create package
 if [ ! -d "artifacts" ]; then
