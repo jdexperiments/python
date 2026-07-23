@@ -46,10 +46,10 @@ mkdir -p "$PYTHON_BUILD_DIR"
 
 # recreate temporary installation directory
 echo "Clean temporary build directory"
-if [ -d "$PYTHON_BUILD_DIR" ]; then
-    rm -rf $"$PYTHON_BUILD_DIR"
+if [ -d "$PYTHON_INSTALL_DIR" ]; then
+    rm -rf $"$PYTHON_INSTALL_DIR"
 fi
-mkdir -p "$PYTHON_BUILD_DIR"
+mkdir -p "$PYTHON_INSTALL_DIR"
 
 # build python
 if [[ "$BUILD_TARGET" == win-* ]]; then
@@ -64,7 +64,10 @@ if [[ "$BUILD_TARGET" == win-* ]]; then
         echo "failed: unknown target"
         exit 1
     fi
-    ./PCbuild/build.bat -e -p $PPF
+    ./PCbuild/build.bat -e -p $PPF -c Release
+    TEMP_INSTALL_WIN="$(cygpath -w "$TEMP_INSTALL")"
+    TARGET_INSTALL_WIN="$(cygpath -w "$PYTHON_INSTALL_DIR")"
+    python3 PC/layout/main.py --build "$TEMP_INSTALL_WIN" --source . --out "$TARGET_INSTALL_WIN" --preset-default
     popd > /dev/null
 else
     pushd "$PYTHON_BUILD_DIR" > /dev/null
@@ -88,7 +91,7 @@ ARCHIVE_NAME="python-$BUILD_VERSION-$BUILD_TARGET"
 ABS_ARCHIVE="$(cd artifacts && pwd)/$ARCHIVE_NAME.tar.bz2"
 if [ ! -f "$ABS_ARCHIVE" ]; then
     echo "Building archive $ABS_ARCHIVE"
-    pushd "$TEMP_INSTALL" > /dev/null
+    pushd "$PYTHON_INSTALL_DIR" > /dev/null
     tar -cjf "$ABS_ARCHIVE" *
     popd > /dev/null
 fi
