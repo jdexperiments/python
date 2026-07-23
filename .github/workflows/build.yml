@@ -23,10 +23,11 @@ jobs:
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
         export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
         export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
+        export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
-        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
         BUILD_VERSION=$( python3 package.py "version-combined" )
@@ -59,10 +60,11 @@ jobs:
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
         export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
         export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
+        export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
-        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
         BUILD_VERSION=$( python3 package.py "version-combined" )
@@ -107,10 +109,11 @@ jobs:
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
         export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
         export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
+        export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
-        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
         BUILD_VERSION=$( python3 package.py "version-combined" )
@@ -154,10 +157,11 @@ jobs:
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
         export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
         export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
+        export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
-        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
         BUILD_VERSION=$( python3 package.py "version-combined" )
@@ -202,10 +206,11 @@ jobs:
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
         export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
         export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
+        export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
-        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
         BUILD_VERSION=$( python3 package.py "version-combined" )
@@ -250,10 +255,11 @@ jobs:
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
         export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
         export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
+        export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
-        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
         BUILD_VERSION=$( python3 package.py "version-combined" )
@@ -298,10 +304,11 @@ jobs:
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
         export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
         export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
+        export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
-        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
         BUILD_VERSION=$( python3 package.py "version-combined" )
@@ -340,10 +347,11 @@ jobs:
         export FROST_BUILDER_PACKAGE_SOURCES="${{ vars.FROST_BUILDER_PACKAGE_SOURCES }}"
         export FROST_BUILDER_SCHEDULER_TASK="${{ vars.FROST_BUILDER_SCHEDULER_TASK }}"
         export FROST_BUILDER_SCHEDULER_TOKEN="${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}"
+        export FROST_BUILDER_SUPPORT_SCRIPTS="${{ vars.FROST_BUILDER_SUPPORT_SCRIPTS }}"
         echo "Cloning build support library"
         mkdir -p frost_support 
         pushd frost_support
-        git clone "${FROST_BUILDER_REPO_URL}/${FROST_BUILDER_REPO_USER}/${FROST_BUILDER_REPO_SUPPORT}.git" .
+        git clone "${FROST_BUILDER_SUPPORT_SCRIPTS}" .
         popd
         echo "Setting up target build variables"
 
