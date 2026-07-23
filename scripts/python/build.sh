@@ -57,7 +57,7 @@ if [[ "$BUILD_TARGET" == win-* ]]; then
     echo "TODO:"
     exit 1
 else
-    ./configure  --prefix="$PYTHON_INSTALL_DIR" --enable-optimizations --with-lto 
+    $PYTHON_SRC_DIR/configure --prefix="$PYTHON_INSTALL_DIR" --enable-optimizations --with-lto 
     make -j$BUILD_CPU_CORES
     make install
 fi
