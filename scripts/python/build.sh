@@ -67,6 +67,8 @@ if [[ "$BUILD_TARGET" == win-* ]]; then
     ./PCbuild/build.bat -e -p $PPF -c Release
     TEMP_INSTALL_WIN="$(cygpath -w "$TEMP_INSTALL")"
     TARGET_INSTALL_WIN="$(cygpath -w "$PYTHON_INSTALL_DIR")"
+    echo "create directory layout..."
+    export PYTHONINCLUDE="$PYTHON_SRC_DIR/Include"
     python3 PC/layout/main.py --build "$TEMP_INSTALL_WIN" --source . --copy "$TARGET_INSTALL_WIN" --preset-default
     popd > /dev/null
 else
