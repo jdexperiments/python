@@ -340,6 +340,14 @@ jobs:
     needs: [ wait-build-all ]
 
     steps:
+    - name: Check out sources
+      uses: actions/checkout@v7
+
+    - name: Set up Python 3
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.12'
+
     - name: Setup package
       shell: bash
       run: |
