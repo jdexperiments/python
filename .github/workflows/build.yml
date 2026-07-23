@@ -37,6 +37,8 @@ jobs:
 
   build-python-linux-x86_64:
     runs-on: ubuntu-24.04
+    target: x86_64-unknown-linux-musl
+    platform: linux-amd64
     needs: wait-dependencies
     environment: build
 
@@ -85,6 +87,8 @@ jobs:
 
   build-python-linux-arm64:
     runs-on: ubuntu-24.04-arm
+    target: x86_64-unknown-linux-musl
+    platform: linux-arm64
     needs: wait-dependencies
     environment: build
 
