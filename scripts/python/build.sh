@@ -89,9 +89,12 @@ else
 fi
 
 # copy license file to artifacts
+echo "Copy licenses"
 cp "$PYTHON_SRC_DIR/LICENSE" "$LAYOUTED_INSTALL/LICENSE.python-$BUILD_VERSION"
 
-# TODO: add manifest
+# add platform dependent manifest
+echo "Build platform manifest"
+python3 package.py version create-platform-manifest > "$LAYOUTED_INSTALL/MANIFEST.python-$BUILD_VERSION"
 
 # create package
 if [ ! -d "artifacts" ]; then
