@@ -53,7 +53,7 @@ mkdir -p "$PYTHON_BUILD_DIR"
 
 # build python
 if [[ "$BUILD_TARGET" == win-* ]]; then
-    pushd "$PYTHON_SRC_DIR/PCbuild" > /dev/null
+    pushd "$PYTHON_SRC_DIR" > /dev/null
     if [ "$BUILD_TARGET" = "win-x86_64" ]; then
         PPF="x64"
         TEMP_INSTALL="$PYTHON_SRC_DIR/PCbuild/x64"
@@ -64,7 +64,7 @@ if [[ "$BUILD_TARGET" == win-* ]]; then
         echo "failed: unknown target"
         exit 1
     fi
-    ./build.bat -e -p $PPF
+    ./PCbuild/build.bat -e -p $PPF
     popd > /dev/null
 else
     pushd "$PYTHON_BUILD_DIR" > /dev/null
@@ -75,7 +75,8 @@ else
     TEMP_INSTALL="$PYTHON_INSTALL_DIR"
 fi
 
-# TODO: add license file
+# copy license file to artifacts
+cp "$PYTHON_SRC_DIR/LICENSE" "TEMP_INSTALL/LICENSE.python-$BUILD_VERSION"
 
 # TODO: add manifest
 
