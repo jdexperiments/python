@@ -227,6 +227,13 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v7
       with:
+        name: python-dbg-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
+        path: temp.build/build-install
+        archive: true
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v7
+      with:
         name: python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         path: artifacts/python-${{env.BUILD_VERSION}}-${{env.BUILD_TARGET}}.tar.bz2
         compression-level: 0
