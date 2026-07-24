@@ -678,4 +678,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.FROST_BUILDER_SCHEDULER_TOKEN }}
       run: |
         echo "Trigger scheduler"
-        gh workflow run 'Trigger by downstream build complete' --repo "${{ env.FROST_BUILDER_SCHEDULER_TASK }}" --ref "main" -f gitref="${{ github.ref_name }}" -f package="python" -f version="$BUILD_VERSION" -f runid="${{ github.run_id }}"
+        gh workflow run 'Trigger by downstream build complete' --repo "${{ vars.FROST_BUILDER_SCHEDULER_TASK }}" --ref "main" -f gitref="${{ github.ref_name }}" -f package="python" -f version="$BUILD_VERSION" -f runid="${{ github.run_id }}"
